@@ -7,7 +7,7 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
 // Определяем типы
 type LatLngLiteral = google.maps.LatLngLiteral;
@@ -61,7 +61,6 @@ function SearchBox({ setSelected, setClickedPlace }: SearchBoxProps) {
       componentRestrictions: { country: 'ru' },
     },
     debounce: 300,
-    cache: 86400, // кэширование на 24 часа
   });
 
   const handleSelect = async (placeDescription: string) => {
@@ -88,7 +87,16 @@ function SearchBox({ setSelected, setClickedPlace }: SearchBoxProps) {
   };
 
   return (
-    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-[400px]">
+    <Box 
+      sx={{ 
+        position: 'absolute',
+        top: '1rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        zIndex: 10,
+      }}
+    >
       <Autocomplete
         freeSolo
         options={status === "OK" ? data : []}
@@ -97,7 +105,7 @@ function SearchBox({ setSelected, setClickedPlace }: SearchBoxProps) {
             ? option 
             : option.description
         }
-        filterOptions={(x) => x} // Отключаем встроенную фильтрацию MUI
+        filterOptions={(x) => x}
         value={value}
         onChange={(event, newValue) => {
           if (newValue && typeof newValue !== 'string') {
@@ -132,13 +140,13 @@ function SearchBox({ setSelected, setClickedPlace }: SearchBoxProps) {
         )}
         renderOption={(props, option) => (
           <li {...props} key={option.place_id}>
-            <div className="py-2 px-4">
+            <Box sx={{ py: 1, px: 2 }}>
               {option.description}
-            </div>
+            </Box>
           </li>
         )}
       />
-    </div>
+    </Box>
   );
 }
 
